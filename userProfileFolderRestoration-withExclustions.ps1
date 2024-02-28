@@ -12,23 +12,22 @@ $destinationPath = "\\$destinationPC\C$\Users\$userToRestore"
 
 # Define files and directories to exclude
 $excludeList = @(
-    "*ntuser.dat*",                # Exclude ntuser.dat files
-    "*config*",                    # Exclude configuration files
-    "*database*",                  # Exclude database files
-    "*system*",                    # Exclude system files
-    "Temp",                        # Exclude Temp folder
-    "Cache",                       # Exclude Cache folder
-    "NTUSER.DAT*",                 # Exclude NTUSER.DAT files
-    "UsrClass.dat*",               # Exclude UsrClass.dat files
-    "Desktop.ini",                 # Exclude Desktop.ini file
-    "Thumbs.db",                   # Exclude Thumbs.db file
-    "AppData\Local\Temp",          # Exclude Temp folder in AppData\Local
-    "AppData\Local\Microsoft\Windows\Temporary Internet Files",   # Exclude Temporary Internet Files
-    "AppData\Local\Microsoft\Windows\WER",                        # Exclude Windows Error Reporting
-    "AppData\Local\Microsoft\Windows\Caches",                     # Exclude Caches folder
-    "AppData\Local\Microsoft\Windows\WebCache",                   # Exclude WebCache folder
-    "AppData\Roaming\Microsoft\Windows\Recent"                    # Exclude Recent folder
+    "*ntuser.dat*",        # Exclude ntuser.dat files
+    "*config*",            # Exclude configuration files
+    "*database*",          # Exclude database files
+    "*system*",            # Exclude system files
+    "*Temp*",              # Exclude Temp folder
+    "*Cache*",             # Exclude Cache folder
+    "NTUSER.DAT*",         # Exclude NTUSER.DAT files
+    "UsrClass.dat*",       # Exclude UsrClass.dat files
+    "Desktop.ini",         # Exclude Desktop.ini file
+    "Thumbs.db",           # Exclude Thumbs.db file
+    "AppData\Local\Temp",  # Exclude Temp folder in AppData\Local
+    "AppData\Roaming\Microsoft\Windows\Recent"   # Exclude Recent folder
 )
+
+# Remove Chrome and Edge directories from the exclusion list
+$excludeList = $excludeList | Where-Object { $_ -notlike "AppData\Local\Google\Chrome*" -and $_ -notlike "AppData\Local\Packages\Microsoft.MicrosoftEdge*" }
 
 # Function to move files and folders using robocopy
 function Move-UserFiles {
@@ -37,7 +36,7 @@ function Move-UserFiles {
         [string]$destination
     )
 
-    robocopy "$source" "$destination" /E /XJ /COPYALL /XD $excludeList /R:0 /W:0 /XO
+    robocopy "$source" "$destination" /E /COPYALL /XD $excludeList /R:0 /W:0 /XO
 }
 
 # Validate source and destination paths
