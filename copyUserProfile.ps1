@@ -18,8 +18,6 @@ $excludeList = @(
     "Recent",              # Exclude Recent folder
     "Cookies",             # Exclude Cookies folder
     "AppData\Local\Temp",  # Exclude Temp folder in AppData\Local
-    "AppData\Local\Packages\Microsoft.MicrosoftEdge*",  # Exclude Edge data directory
-    "AppData\Local\Google\Chrome*"  # Exclude Chrome data directory
 )
 
 # Create a folder C:\Reg-Export on the source computer
