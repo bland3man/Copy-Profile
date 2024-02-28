@@ -1,5 +1,7 @@
 # Copy-Profile
-This is intended to actually copy a user's profile from one machine to another
+This is intended to actually copy a user's profile from one machine to another.
+
+In my original code I wanted to copy a single user's profile from one computer to another.  I did have another script working to copy multiple users, but this focuses on a single user.
 
 Please use very carefully.  This has the potential to crash.
 
