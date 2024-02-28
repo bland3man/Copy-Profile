@@ -3,6 +3,25 @@ $userToCopy = Read-Host "Enter the username to be copied"
 $sourceComputer = Read-Host "Enter the source computer name"
 $destinationComputer = Read-Host "Enter the destination computer name"
 
+# Define files and directories to exclude
+$excludeList = @(
+    "*ntuser.dat*",        # Exclude ntuser.dat files
+    "*config*",            # Exclude configuration files
+    "*database*",          # Exclude database files
+    "*system*",            # Exclude system files
+    "*Temp*",              # Exclude Temp folder
+    "*Cache*",             # Exclude Cache folder
+    "NTUSER.DAT*",         # Exclude NTUSER.DAT files
+    "UsrClass.dat*",       # Exclude UsrClass.dat files
+    "Desktop.ini",         # Exclude Desktop.ini file
+    "Thumbs.db",           # Exclude Thumbs.db file
+    "Recent",              # Exclude Recent folder
+    "Cookies",             # Exclude Cookies folder
+    "AppData\Local\Temp",  # Exclude Temp folder in AppData\Local
+    "AppData\Local\Packages\Microsoft.MicrosoftEdge*",  # Exclude Edge data directory
+    "AppData\Local\Google\Chrome*"  # Exclude Chrome data directory
+)
+
 # Create a folder C:\Reg-Export on the source computer
 $exportPath = "C:\Reg-Export"
 if (-not (Test-Path $exportPath -PathType Container)) {
@@ -45,7 +64,7 @@ Write-Host "Registry branch exported to: $destinationRegFile"
 
 # Robocopy the user's profile folder to the source computer
 $sourceProfileFolder = "C:\Users\$userToCopy"
-$robocopyCommand = "robocopy ""$sourceProfileFolder"" ""$sourceFolder\$userToCopy"" /E /NFL /NJH /NJS /R:0 /W:0 /COPYALL /XJ /TEE"
+$robocopyCommand = "robocopy ""$sourceProfileFolder"" ""$sourceFolder\$userToCopy"" /E /NFL /NJH /NJS /R:0 /W:0 /COPYALL /XJ /TEE /XD $excludeList"
 Invoke-Expression -Command $robocopyCommand
 
 # Check if the user's profile folder already exists on the source computer
@@ -69,7 +88,7 @@ robocopy "$sourceRegExport" "$destinationRegExport" /E /NFL /NJH /NJS /R:0 /W:0 
 
 # Copy the source computer's folder to the destination computer
 $destinationFolder = "\\$destinationComputer\C$"
-$robocopyCommand = "robocopy ""$sourceFolder"" ""$destinationFolder\$sourceComputer"" /E /NFL /NJH /NJS /R:0 /W:0 /COPYALL /XJ /TEE"
+$robocopyCommand = "robocopy ""$sourceFolder"" ""$destinationFolder\$sourceComputer"" /E /NFL /NJH /NJS /R:0 /W:0 /COPYALL /XJ /TEE /XD $excludeList"
 Invoke-Expression -Command $robocopyCommand
 
 # Output completion information
